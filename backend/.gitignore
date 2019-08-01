@@ -24,3 +24,4 @@ backend-*.tar
 
 # Ignore Dialyzer (Dialyzer is a static analysis tool that identifies software discrepancies, such as definite type errors, code that has become dead or unreachable because of programming error, and unnecessary tests, in single Erlang modules or entire (sets of) applications.)
 /.elixir_ls/
+.elixir_ls/
