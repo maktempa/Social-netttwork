@@ -1,4 +1,4 @@
-# To do: 1) save hash, not password; 2) make email unique constraint? (then validate it by using regex; need make unique in migration to - it is db-side check); 3) more informative registration feedback;
+# To do: 1) save hash, not password; 2) make email unique constraint? (then validate it by using regex; need make unique in migration too - it is db-side check); 3) more informative registration feedback;
 #	 4) put  checks in external files(controllers?); 5) __MODULE__ for Backend.User; 6) how to connect to outer world?; 7) validate_confirmation(); 8) etc
 defmodule Backend.User do
   use Ecto.Schema
@@ -15,8 +15,8 @@ defmodule Backend.User do
     # plus auto field :id, integer
   end
 
-def changeset(user, params \\ %{}) do
-  user
+def changeset(userw, params \\ %{}) do
+  userw
   # |> Ecto.Changeset.cast(params, [:email, :login, :password, :age])
   |> Ecto.Changeset.cast(params, [:login, :password, :name, :surname, :middle_name, :age, :city])
   |> Ecto.Changeset.validate_required([:login, :password], message: "Both login and password should be provided")
