@@ -1,22 +1,31 @@
 # To do: 1) save hash, not password; 2) make email unique constraint? (then validate it by using regex; need make unique in migration too - it is db-side check); 3) more informative registration feedback;
 #	 4) put  checks in external files(controllers?); 5) __MODULE__ for Backend.User; 6) how to connect to outer world?; 7) validate_confirmation(); 8) etc
+
 defmodule Backend.User do
   use Ecto.Schema
+  # import Ecto.Changeset       # alows to use cast() and other functions instead of Ecto.Changeset.cast()
 
   schema "users" do
     # field :email, :string
     field :login, :string
-    field :password, :string
+    field :password, :string                  # make it virtual after hash relise: field :password, :string, :virtual
+    # field :password, :string, :virtual
+    # field :token, :string, :virtual
     field :name, :string
     field :surname, :string
     field :middle_name, :string
     field :age, :integer
     field :city, :string
     # plus auto field :id, integer
+
+    timestamps()      # Adds :inserted_at and :updated_at timestamp columns.
+
+    has_many :outcome_friendships, Background.Friendship, foreign_key: :requester_user_id
+    has_many :income_friendships, Background.Friendship, foreign_key: :respondent_user_id
   end
 
-def changeset(userw, params \\ %{}) do
-  userw
+def changeset(user_struct, params \\ %{}) do
+  user_struct
   # |> Ecto.Changeset.cast(params, [:email, :login, :password, :age])
   |> Ecto.Changeset.cast(params, [:login, :password, :name, :surname, :middle_name, :age, :city])
   |> Ecto.Changeset.validate_required([:login, :password], message: "Both login and password should be provided")

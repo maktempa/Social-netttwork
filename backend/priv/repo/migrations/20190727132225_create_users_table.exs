@@ -11,6 +11,8 @@ defmodule Backend.Repo.Migrations.CreateUsersTable do
       add :middle_name, :string
       add :age, :integer
       add :city, :string
+
+      timestamps()
     end
     create unique_index(:users, :login)
   end
