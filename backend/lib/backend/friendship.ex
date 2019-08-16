@@ -12,6 +12,6 @@ defmodule Background.Friendship do
 def changeset(struct, params \\%{}) do    # TODO: fix validation, opts
     struct
     |> cast(params, [:active, :requester_user, :respondent_user])
-    |> validate_required([:active], opts \\ [])S
+    |> validate_required([:active])
   end
 end
