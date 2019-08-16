@@ -1,4 +1,6 @@
+# change to many_to_many? any advantages of it?
 
+defmodule Background.Friendship do
   use Backend.Model
 
   schema "friendships" do
@@ -6,7 +8,8 @@
     belongs_to :requester_user, Backend.User
     belongs_to :respondent_user, Backend.User
   end
-  def chan],eset(struct, params \\%{}) do
+
+def changeset(struct, params \\%{}) do    # TODO: fix validation,
     struct
     |> cast(params, [:active, :requester_user, :respondent_user])
     |> validate_required([:active], opts \\ [])

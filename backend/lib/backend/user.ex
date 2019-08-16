@@ -20,10 +20,15 @@ defmodule Backend.User do
 
     timestamps()      # Adds :inserted_at and :updated_at timestamp columns.
 
-    has_many :outcome_friendships, Background.Friendship, foreign_key: :requester_user_id
-    has_many :income_friendships, Background.Friendship, foreign_key: :respondent_user_id
+    # has_many :outcome_friendships, Background.Friendship, foreign_key: :requester_user_id
+    # has_many :income_friendships, Background.Friendship, foreign_key: :respondent_user_id
+    many_to_many :possible_friends, Backend.User, join_through: Backend.Friendship
   end
 
+@spec changeset(
+        {map, map} | %{:__struct__ => atom | %{__changeset__: map}, optional(atom) => any},
+        :invalid | %{optional(:__struct__) => none, optional(atom | binary) => any}
+      ) :: Ecto.Changeset.t()
 def changeset(user_struct, params \\ %{}) do
   user_struct
   # |> Ecto.Changeset.cast(params, [:email, :login, :password, :age])
