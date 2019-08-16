@@ -9,9 +9,9 @@ defmodule Background.Friendship do
     belongs_to :respondent_user, Backend.User
   end
 
-def changeset(struct, params \\%{}) do    # TODO: fix validation,
+def changeset(struct, params \\%{}) do    # TODO: fix validation, opts
     struct
     |> cast(params, [:active, :requester_user, :respondent_user])
-    |> validate_required([:active], opts \\ [])
+    |> validate_required([:active], opts \\ [])S
   end
 end
