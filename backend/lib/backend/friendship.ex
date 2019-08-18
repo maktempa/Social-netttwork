@@ -2,6 +2,7 @@
 
 defmodule Backend.Friendship do
   use Backend.Model
+  alias Backend.{Repo, User, Friendship}
 
   schema "friendships" do
     field(:active, :boolean, default: false)
@@ -11,7 +12,7 @@ defmodule Backend.Friendship do
     timestamps()
   end
 
-  # TODO: fix validation, opts
+  # TODO: fix validation, opts:
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [:active, :requester_user_id, :respondent_user_id])
@@ -25,5 +26,37 @@ defmodule Backend.Friendship do
       respondent_user_id: respondent_user.id
     })
     |> Backend.Repo.insert()
+  end
+
+  def create2(requester_user, respondent_user) do
+    # user = Repo.get_by(User, login: ^requester_user)
+    # case user do
+    #   :nil -> raise("No sucher requester!")
+    #   _ -> do
+
+    #   end
+    # end
+    with %User{id: ^requester_user} = user <- Repo.get(User, requester_user) do
+      user_with_preloaded_friends = user
+      |> Backend.Repo.preload(:possible_friends)
+
+      user_with_preloaded_friends
+      |> Ecto.Changeset.change()
+      |> Ecto.Changeset.put_assoc(:possible_friends,
+          [Repo.get(Backend.User, respondent_user) | user_with_preloaded_friends.possible_friends])
+      |> Repo.update!()
+    else
+      :nil -> {:error, "Requester_user id not found"}
+    end
+    # with %User{id: ^requester_user} = user <- Repo.get(User, requester_user) do
+    #   user
+    #   |> Backend.Repo.preload(:possible_friends)
+    #   |> Ecto.Changeset.change()
+    #   |> Ecto.Changeset.put_assoc(:possible_friends,
+    #       [Repo.get(Backend.User, respondent_user) | Repo.preload(user, :possible_friends).possible_friends])
+    #   |> Repo.update()
+    # else
+    #   :nil -> {:error, "Requester_user id not found"}
+    # end
   end
 end

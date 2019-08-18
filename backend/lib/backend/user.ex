@@ -28,6 +28,12 @@ defmodule Backend.User do
     many_to_many(:possible_friends, Backend.User,
       join_through: Backend.Friendship,
       join_keys: [requester_user_id: :id, respondent_user_id: :id]
+      # join_keys: [respondent_user_id: :id, requester_user_id: :id]
+    )
+    many_to_many(:wannabe_friends, Backend.User,
+      join_through: Backend.Friendship,
+      join_keys: [respondent_user_id: :id, requester_user_id: :id]
+      # join_keys: [respondent_user_id: :id, requester_user_id: :id]
     )
   end
 
