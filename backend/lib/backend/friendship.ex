@@ -60,3 +60,4 @@ defmodule Backend.Friendship do
     # end
   end
 end
+
