@@ -67,3 +67,4 @@ def changeset(struct, params \\%{}) do    # TODO: fix validation, opts
     |> validate_required([:active], opts \\ [])S
   end
 end
+
