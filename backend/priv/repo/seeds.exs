@@ -1,3 +1,15 @@
+# Script for populating the database. You can run it as:
+#
+#     mix run priv/repo/seeds.exs
+#
+# Inside the script, you can read and write to any of your
+# repositories directly:
+#
+#     Backend.Repo.insert!(%Backend.SomeSchema{})
+#
+# We recommend using the bang functions (`insert!`, `update!`
+# and so on) as they will fail if something goes wrong.
+
 # use Backend.Model # doesn't work - need to be in module
 import Ecto.Query
 alias Backend.{Repo, User, Friendship}
