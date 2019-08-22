@@ -1,6 +1,7 @@
 # change to many_to_many? any advantages of it?
 
 defmodule Backend.Friendship do
+
   use Backend.Model
   alias Backend.{Repo, User, Friendship}
 
@@ -58,5 +59,11 @@ defmodule Backend.Friendship do
     # else
     #   :nil -> {:error, "Requester_user id not found"}
     # end
+  end
+
+def changeset(struct, params \\%{}) do    # TODO: fix validation, opts
+    struct
+    |> cast(params, [:active, :requester_user, :respondent_user])
+    |> validate_required([:active], opts \\ [])S
   end
 end

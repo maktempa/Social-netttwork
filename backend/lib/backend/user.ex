@@ -25,6 +25,7 @@ defmodule Backend.User do
 
     # has_many :outcome_friendships, Background.Friendship, foreign_key: :requester_user_id
     # has_many :income_friendships, Background.Friendship, foreign_key: :respondent_user_id
+
     many_to_many(:possible_friends, Backend.User,
       join_through: Backend.Friendship,
       join_keys: [requester_user_id: :id, respondent_user_id: :id]
@@ -69,6 +70,7 @@ defmodule Backend.User do
     )
     |> Ecto.Changeset.unique_constraint(:login, message: "Login already exists")
   end
+
 
   # creating user
   def create(params) do
