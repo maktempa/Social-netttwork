@@ -17,6 +17,20 @@ defmodule Backend.Schema do
       end
     end
 
+    mutation do
+      # mutation name "register_user", response type ":users" (schema/type described at Backend.User:user), or response could be object defined here
+      field :user_register, :users do
+        arg :login, non_null(:string)
+        arg :password, non_null(:string)  #TODO: fix plain password?
+        arg :name, :string
+        arg :surname, :string
+        arg :middle_name, :string
+        arg :age, :integer
+        arg :city, :string
+        resolve &UserResolver.user_register/2
+      end
+    end
+
     object :users do
       field :id, non_null(:id)
       field :login, non_null(:string)
