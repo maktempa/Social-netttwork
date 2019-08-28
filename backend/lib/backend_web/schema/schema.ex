@@ -36,7 +36,7 @@ defmodule BackendWeb.Schema.Schema do
     # subscription for creation of users with specified age
     # TODO: add multitrigger like on age < 18 ? is it possible?
     subscription do
-      field :user_regiestered_by_age, :user do
+      field :user_registered_by_age, :user do
         arg(:age, non_null(:integer))
 
         config (fn args, _ ->
