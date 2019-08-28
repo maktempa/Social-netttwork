@@ -1,4 +1,4 @@
-defmodule Backend.Resolvers.UserResolver do	    # what if just Backend.Resolvers.User ?
+defmodule BackendWeb.Resolvers.UserResolver do	    # what if just BackendWeb.Resolvers.User ?
   alias Backend.{User, Repo}
 
   def get_users(_, _) do

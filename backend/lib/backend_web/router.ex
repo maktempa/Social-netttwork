@@ -11,7 +11,8 @@ defmodule BackendWeb.Router do
   scope "/" do
 	  forward "/graphiql",
 			Absinthe.Plug.GraphiQL,
-			schema: Backend.Schema
+      schema: BackendWeb.Schema.Schema,
+      socket_url: "ws://localhost:4000/socket"
   end
 
 end
