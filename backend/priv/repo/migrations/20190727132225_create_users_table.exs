@@ -5,7 +5,7 @@ defmodule Backend.Repo.Migrations.CreateUsersTable do
     create table(:users) do
       # add :email, :string
       add(:login, :string)
-      add(:password, :string)
+      add(:password_hash, :string)
       add(:name, :string)
       add(:surname, :string)
       add(:middle_name, :string)

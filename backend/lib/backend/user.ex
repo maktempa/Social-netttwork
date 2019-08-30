@@ -2,7 +2,9 @@
 # 	 4) put  checks in external files(controllers?); 5) __MODULE__ for Backend.User; 6) how to connect to outer world?; 7) validate_confirmation(); 8) etc
 
 defmodule Backend.User do
-  use Ecto.Schema
+  # use Ecto.Schema
+  use Backend.Model
+
 
   # import Ecto.Changeset       # alows to use cast() and other functions instead of Ecto.Changeset.cast()
 
@@ -10,9 +12,10 @@ defmodule Backend.User do
     # field :email, :string
     field(:login, :string)
     # make it virtual after hash relise: field :password, :string, :virtual
-    field(:password, :string)
-    # field :password, :string, :virtual
-    # field :token, :string, :virtual
+    # field(:password, :string)
+    field :password, :string, virtual: true
+    field :password_hash, :string
+    field :token, :string, virtual: true
     field(:name, :string)
     field(:surname, :string)
     field(:middle_name, :string)
@@ -68,6 +71,7 @@ defmodule Backend.User do
       message: "Age should be varied from 1 to 100"
     )
     |> Ecto.Changeset.unique_constraint(:login, message: "Login already exists")
+    |> put_password_hash
   end
 
   # creating user
@@ -86,7 +90,7 @@ defmodule Backend.User do
     end
   end
 
-  # user authentification
+  # user authentication
   def authenticate(login, password) do
     user = Backend.Repo.get_by(Backend.User, login: login)
     #  case user do
@@ -108,4 +112,15 @@ defmodule Backend.User do
         IO.puts("Encountered some error(s)")
     end
   end
+
+  # put_password_hash() for changeset with password changes
+  defp put_password_hash(
+    %Ecto.Changeset{valid?: true, changes: %{password: password}} = changeset
+  ) do
+    change(changeset, Bcrypt.add_hash(password))
+    IO.puts(inspect("Changeset is equal: #{changeset}"))
+  end
+
+  # put_password_hash() in case no password changes
+  defp put_password_hash(changeset), do: changeset
 end
