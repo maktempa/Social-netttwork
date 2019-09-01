@@ -5,17 +5,17 @@ defmodule Backend.User do
   # use Ecto.Schema
   use Backend.Model
 
-
   # import Ecto.Changeset       # alows to use cast() and other functions instead of Ecto.Changeset.cast()
 
   schema "users" do
     # field :email, :string
-    field(:login, :string)
+    field(:login, :string, unique: true)
     # make it virtual after hash relise: field :password, :string, :virtual
     # field(:password, :string)
-    field :password, :string, virtual: true
-    field :password_hash, :string
-    field :token, :string, virtual: true
+    field(:password, :string, virtual: true)
+    field(:password_confirmation, :string, virtual: true)
+    field(:password_hash, :string)
+    field(:token, :string, virtual: true)
     field(:name, :string)
     field(:surname, :string)
     field(:middle_name, :string)
@@ -33,6 +33,7 @@ defmodule Backend.User do
       join_keys: [requester_user_id: :id, respondent_user_id: :id]
       # join_keys: [respondent_user_id: :id, requester_user_id: :id]
     )
+
     many_to_many(:wannabe_friends, Backend.User,
       join_through: Backend.Friendship,
       join_keys: [respondent_user_id: :id, requester_user_id: :id]
@@ -47,12 +48,21 @@ defmodule Backend.User do
   def changeset(user_struct, params \\ %{}) do
     user_struct
     # |> Ecto.Changeset.cast(params, [:email, :login, :password, :age])
-    |> Ecto.Changeset.cast(params, [:login, :password, :name, :surname, :middle_name, :age, :city])
-    |> Ecto.Changeset.validate_required([:login, :password],
+    |> Ecto.Changeset.cast(params, [
+      :login,
+      :password,
+      :password_confirmation,
+      :name,
+      :surname,
+      :middle_name,
+      :age,
+      :city
+    ])
+    |> Ecto.Changeset.validate_required([:login, :password, :password_confirmation],
       message: "Both login and password should be provided"
     )
     |> Ecto.Changeset.validate_length(:password,
-      min: 3,
+      min: 3, max:100
       message: "Password must have more then 2 symbols"
     )
     # has a number
@@ -66,6 +76,10 @@ defmodule Backend.User do
     # has a lower case letter
     |> Ecto.Changeset.validate_format(:password, ~r/[a-z]+/,
       message: "Password must contain a lower-case letter"
+    )
+    |> Ecto.Changeset.validate_confirmation(:password,
+      message: "Password and password confirmation don't match",
+      required: true
     )
     |> Ecto.Changeset.validate_inclusion(:age, 1..100,
       message: "Age should be varied from 1 to 100"
@@ -115,8 +129,8 @@ defmodule Backend.User do
 
   # put_password_hash() for changeset with password changes
   defp put_password_hash(
-    %Ecto.Changeset{valid?: true, changes: %{password: password}} = changeset
-  ) do
+        %Ecto.Changeset{valid?: true, changes: %{password: password}} = changeset
+      ) do
     change(changeset, Bcrypt.add_hash(password))
     IO.puts(inspect("Changeset is equal: #{changeset}"))
   end
