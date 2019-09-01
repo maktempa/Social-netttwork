@@ -1,8 +1,9 @@
-defmodule BackendWeb.Resolvers.UserResolver do	    # what if just BackendWeb.Resolvers.User ?
+# what if just BackendWeb.Resolvers.User ?
+defmodule BackendWeb.Resolvers.UserResolver do
   alias Backend.{User, Repo}
 
   def get_users(_, _) do
-    {:ok, User |> Repo.all}
+    {:ok, User |> Repo.all()}
   end
 
   def user_register(%{} = data, _) do
@@ -13,7 +14,5 @@ defmodule BackendWeb.Resolvers.UserResolver do	    # what if just BackendWeb.Res
     end
 
     # {ok, %User{}} <- %User{} |> User.changeset(data) |> Repo.insert()
-
   end
-
 end

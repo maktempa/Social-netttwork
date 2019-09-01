@@ -37,17 +37,21 @@ defmodule Backend.Friendship do
     #   end
     # end
     with %User{id: ^requester_user} = user <- Repo.get(User, requester_user) do
-      user_with_preloaded_friends = user
-      |> Backend.Repo.preload(:possible_friends)
+      user_with_preloaded_friends =
+        user
+        |> Backend.Repo.preload(:possible_friends)
 
       user_with_preloaded_friends
       |> Ecto.Changeset.change()
-      |> Ecto.Changeset.put_assoc(:possible_friends,
-          [Repo.get(Backend.User, respondent_user) | user_with_preloaded_friends.possible_friends])
+      |> Ecto.Changeset.put_assoc(
+        :possible_friends,
+        [Repo.get(Backend.User, respondent_user) | user_with_preloaded_friends.possible_friends]
+      )
       |> Repo.update!()
     else
-      :nil -> {:error, "Requester_user id not found"}
+      nil -> {:error, "Requester_user id not found"}
     end
+
     # with %User{id: ^requester_user} = user <- Repo.get(User, requester_user) do
     #   user
     #   |> Backend.Repo.preload(:possible_friends)
@@ -60,4 +64,3 @@ defmodule Backend.Friendship do
     # end
   end
 end
-

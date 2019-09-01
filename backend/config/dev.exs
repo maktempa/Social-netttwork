@@ -8,11 +8,11 @@ config :backend, Backend.Repo,
   password: "postgres",
   hostname: "localhost",
 
-# config :backend, Backend.Repo,
-#   username: "postgres",
-#   password: "postgres",
-#   database: "backend_dev",
-#   hostname: "localhost",
+  # config :backend, Backend.Repo,
+  #   username: "postgres",
+  #   password: "postgres",
+  #   database: "backend_dev",
+  #   hostname: "localhost",
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 

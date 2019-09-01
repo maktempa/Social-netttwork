@@ -62,7 +62,8 @@ defmodule Backend.User do
       message: "Both login and password should be provided"
     )
     |> Ecto.Changeset.validate_length(:password,
-      min: 3, max:100
+      min: 3,
+      max: 100,
       message: "Password must have more then 2 symbols"
     )
     # has a number
@@ -129,8 +130,8 @@ defmodule Backend.User do
 
   # put_password_hash() for changeset with password changes
   defp put_password_hash(
-        %Ecto.Changeset{valid?: true, changes: %{password: password}} = changeset
-      ) do
+         %Ecto.Changeset{valid?: true, changes: %{password: password}} = changeset
+       ) do
     change(changeset, Bcrypt.add_hash(password))
     IO.puts(inspect("Changeset is equal: #{changeset}"))
   end
