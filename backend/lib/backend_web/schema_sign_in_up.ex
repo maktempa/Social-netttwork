@@ -4,7 +4,9 @@ defmodule BackendWeb.SchemaSignInUp do
   import_types(BackendWeb.Schema.UserTypes)
 
   query do
-    #   import_fields(:user_queries)
+    # import_fields(:user_queries)
+    field :dummy_query, :user do
+    end
   end
 
   mutation do
@@ -12,6 +14,6 @@ defmodule BackendWeb.SchemaSignInUp do
   end
 
   # subscription do
-  #   # import_fields :user_subscriptions
+  #   import_fields(:user_subscriptions)
   # end
 end

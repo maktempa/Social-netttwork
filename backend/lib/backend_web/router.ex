@@ -13,6 +13,7 @@ defmodule BackendWeb.Router do
     forward(
       "/graphql",
       Absinthe.Plug,
+      # TODO: !!! Check if WebSocket requires scheme to be specified here. If true, then use BackendWeb.Schema !!!
       schema: BackendWeb.SchemaSignInUp
       # schema: BackendWeb.Schema
       # socket_url: "ws://localhost:4000/socket"

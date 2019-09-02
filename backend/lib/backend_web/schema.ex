@@ -13,6 +13,6 @@ defmodule BackendWeb.Schema do
   end
 
   subscription do
-    # import_fields :user_subscriptions
+    import_fields(:user_subscriptions)
   end
 end

@@ -49,6 +49,7 @@ defmodule BackendWeb.Resolvers.UserResolver do
 
   defp user_with_token(user) do
     {:ok, token, _claims} = Guardian.encode_and_sign(user)
+    IO.puts("Token is: #{inspect(token)}")
     Map.put(user, :token, token)
   end
 

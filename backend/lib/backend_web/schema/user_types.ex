@@ -24,24 +24,39 @@ defmodule BackendWeb.Schema.UserTypes do
     # )
   end
 
+  object :user_with_token do
+    field(:id, non_null(:id))
+    field(:login, non_null(:string))
+    field(:token, non_null(:string))
+    field(:name, :string)
+    field(:surname, :string)
+    field(:age, :integer)
+    field(:gender, :integer)
+
+    # TODO: extract many to many association - friends
+    # field(:friends, list_of(:user),
+    #   resolve: dataloader(Data, some_binded_table, args(%{where: ":active == true"}))
+    # )
+  end
+
   object :user_queries do
     @desc "Gets all users"
     field :get_users, list_of(:user) do
       resolve(&Resolvers.UserResolver.get_users/2)
     end
 
-    # TODO: add user search, current user, etc
-    @desc "Search users"
-    field :search_users, list_of(:user) do
-      arg(:search_term, non_null(:string))
+    # # TODO: add user search, current user, etc
+    # @desc "Search users"
+    # field :search_users, list_of(:user) do
+    #   arg(:search_term, non_null(:string))
 
-      resolve(&Resolvers.UserResolver.search_users/3)
-    end
+    #   resolve(&Resolvers.UserResolver.search_users/3)
+    # end
 
-    @desc "Get current user"
-    field :current_user, :user do
-      resolve(&Resolvers.UserResolver.current_user/3)
-    end
+    # @desc "Get current user"
+    # field :current_user, :user do
+    #   resolve(&Resolvers.UserResolver.current_user/3)
+    # end
 
     field :test, :string do
       arg(:name, non_null(:string))
@@ -72,7 +87,7 @@ defmodule BackendWeb.Schema.UserTypes do
     end
 
     @desc "Authenticate"
-    field :authenticate, :user do
+    field :authenticate, :user_with_token do
       arg(:login, non_null(:string))
       arg(:password, non_null(:string))
       arg(:password_confirmation, non_null(:string))
@@ -82,7 +97,7 @@ defmodule BackendWeb.Schema.UserTypes do
 
     @desc "Sign up"
     # mutation name "sign_up", response type ":user"  object defined here; has less parameteres (only not_null ones)
-    field :sign_up, :user do
+    field :sign_up, :user_with_token do
       arg(:login, non_null(:string))
 
       # TODO: fix plain password? How to forbid to reply this field on query - in object definition (query definition or in resolver?)
