@@ -9,6 +9,7 @@ defmodule Backend.Repo.Migrations.CreateUsersTable do
       add(:name, :string)
       add(:surname, :string)
       add(:middle_name, :string)
+      add(:gender, :string)
       add(:age, :integer)
       add(:city, :string)
 

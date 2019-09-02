@@ -7,6 +7,8 @@ defmodule Backend.User do
 
   # import Ecto.Changeset       # alows to use cast() and other functions instead of Ecto.Changeset.cast()
 
+  alias Backend.Repo
+
   schema "users" do
     # field :email, :string
     field(:login, :string, unique: true)
@@ -19,6 +21,7 @@ defmodule Backend.User do
     field(:name, :string)
     field(:surname, :string)
     field(:middle_name, :string)
+    field(:gender, :string)
     field(:age, :integer)
     field(:city, :string)
     # plus auto field :id, integer
@@ -41,11 +44,21 @@ defmodule Backend.User do
     )
   end
 
+  def search(search_term, current_user) do
+    Repo.all(
+      from(u in __MODULE__,
+        where: ilike(u.name, ^("%" <> search_term <> "%")) and u.id != ^current_user.id,
+        limit: 25
+      )
+    )
+  end
+
   @spec changeset(
           {map, map} | %{:__struct__ => atom | %{__changeset__: map}, optional(atom) => any},
           :invalid | %{optional(:__struct__) => none, optional(atom | binary) => any}
         ) :: Ecto.Changeset.t()
-  def changeset(user_struct, params \\ %{}) do
+  # cant use "def changeset(user_struct, params \\ %{}) do" bc changeset from Backend.Model macro catches changeset/1
+  def changeset(%__MODULE__{} = user_struct, params) do
     user_struct
     # |> Ecto.Changeset.cast(params, [:email, :login, :password, :age])
     |> Ecto.Changeset.cast(params, [
@@ -55,6 +68,7 @@ defmodule Backend.User do
       :name,
       :surname,
       :middle_name,
+      :gender,
       :age,
       :city
     ])
@@ -90,20 +104,21 @@ defmodule Backend.User do
   end
 
   # creating user
-  def create(params) do
-    # changeset(%Backend.User{}, params)
-    # |> Backend.Repo.insert()
+  # using create() from Backend.Model macro
+  # def create(params) do
+  #   # changeset(%Backend.User{}, params)
+  #   # |> Backend.Repo.insert()
 
-    changeset_for_registration = Backend.User.changeset(%Backend.User{}, params)
+  #   changeset_for_registration = Backend.User.changeset(%Backend.User{}, params)
 
-    case Backend.Repo.insert(changeset_for_registration) do
-      {:ok, user} ->
-        IO.puts("User registered succesfully!")
+  #   case Backend.Repo.insert(changeset_for_registration) do
+  #     {:ok, user} ->
+  #       IO.puts("User registered succesfully!")
 
-      {:error, changeset} ->
-        IO.puts("User registration failed! \n #{inspect(changeset.errors)}")
-    end
-  end
+  #     {:error, changeset} ->
+  #       IO.puts("User registration failed! \n #{inspect(changeset.errors)}")
+  #   end
+  # end
 
   # user authentication
   def authenticate(login, password) do
@@ -133,7 +148,7 @@ defmodule Backend.User do
          %Ecto.Changeset{valid?: true, changes: %{password: password}} = changeset
        ) do
     change(changeset, Bcrypt.add_hash(password))
-    IO.puts(inspect("Changeset is equal: #{changeset}"))
+    # IO.puts(inspect("Changeset is equal: #{changeset}"))
   end
 
   # put_password_hash() in case no password changes

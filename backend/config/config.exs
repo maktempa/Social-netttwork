@@ -29,8 +29,15 @@ config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
 
+# Configures Guardian module for authentication
+config :backend, Backend.Guardian,
+  issuer: "backend",
+  secretkey: "8SmlgKKQ7Gaas6kmskehp8DAeatTyuS2QRj1M7Pd3bjaZFDnA8J0OI7iF0hBwtVF"
+
+# secret_key: "Secret key. You can use `mix guardian.gen.secret` to get one"
+
 # Use Jason for JSON parsing in Phoenix
-config :phoenix, :json_library, Jason
+config(:phoenix, :json_library, Jason)
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

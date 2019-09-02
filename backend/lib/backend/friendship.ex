@@ -13,7 +13,8 @@ defmodule Backend.Friendship do
   end
 
   # TODO: fix validation, opts:
-  def changeset(struct, params \\ %{}) do
+  # cant use "def changeset(struct, params \\ %{}) do" bc Backend.Model macro catches changeset/1
+  def changeset(struct, params) do
     struct
     |> cast(params, [:active, :requester_user_id, :respondent_user_id])
     |> validate_required([:active])

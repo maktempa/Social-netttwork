@@ -1,6 +1,6 @@
 # what if just BackendWeb.Resolvers.User ?
 defmodule BackendWeb.Resolvers.UserResolver do
-  alias Backend.{User, Repo}
+  alias Backend.{User, Guardian, Repo}
 
   def get_users(_, _) do
     {:ok, User |> Repo.all()}
@@ -14,5 +14,51 @@ defmodule BackendWeb.Resolvers.UserResolver do
     end
 
     # {ok, %User{}} <- %User{} |> User.changeset(data) |> Repo.insert()
+  end
+
+  def sign_up(_parents, args, _resolution) do
+    args
+    # User.create() defined through Backend.Model macro with create()
+    |> User.create()
+    |> case do
+      {:ok, user} ->
+        {:ok, user_with_token(user)}
+
+      {:error, changeset} ->
+        {:error, extract_error_message(changeset)}
+    end
+  end
+
+  def authenticate(_parent, args, _resolution) do
+    error = {:error, [[field: :login, message: "Invalid login or password"]]}
+
+    case User.find_by(login: String.downcase(args[:login])) do
+      nil ->
+        error
+
+      user ->
+        case Bcrypt.check_pass(user, args[:password]) do
+          {:error, _} ->
+            error
+
+          {:ok, user} ->
+            {:ok, user_with_token(user)}
+        end
+    end
+  end
+
+  defp user_with_token(user) do
+    {:ok, token, _claims} = Guardian.encode_and_sign(user)
+    Map.put(user, :token, token)
+  end
+
+  defp extract_error_message(changeset) do
+    changeset.errors
+    |> Enum.map(fn {field, {error, _details}} ->
+      [
+        field: field,
+        message: String.capitalize(error)
+      ]
+    end)
   end
 end

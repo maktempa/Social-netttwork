@@ -1,7 +1,9 @@
 defmodule BackendWeb.UserSocket do
   use Phoenix.Socket
-  use Absinthe.Phoenix.Socket, schema: BackendWeb.Schema.Schema
+  use Absinthe.Phoenix.Socket, schema: BackendWeb.Schema
 
+  alias Absinthe.Phoenix.Socket
+  alias Backend.{Guardian, User}
   ## Channels
   # channel "room:*", BackendWeb.RoomChannel
 
@@ -16,6 +18,21 @@ defmodule BackendWeb.UserSocket do
   #
   # See `Phoenix.Token` documentation for examples in
   # performing token verification on connect.
+
+  # def connect(_params, socket, _connect_info) do
+  # {:ok, socket}
+  # end
+
+  def connect(%{"token" => token}, socket, _connect_info) do
+    with {:ok, claim} <- Guardian.decode_and_verify(token),
+         user when not is_nil(user) <- User.find(claim["sub"]) do
+      socket = Socket.put_options(socket, context: %{current_user: user})
+      {:ok, socket}
+    else
+      _ -> {:ok, socket}
+    end
+  end
+
   def connect(_params, socket, _connect_info) do
     {:ok, socket}
   end
@@ -30,5 +47,9 @@ defmodule BackendWeb.UserSocket do
   #     BackendWeb.Endpoint.broadcast("user_socket:#{user.id}", "disconnect", %{})
   #
   # Returning `nil` makes this socket anonymous.
+  def id(%{assigns: %{absinthe: %{opts: [context: %{current_user: user}]}}}) do
+    "user_socket:#{user.od}"
+  end
+
   def id(_socket), do: nil
 end
