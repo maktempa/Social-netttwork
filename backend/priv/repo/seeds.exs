@@ -16,11 +16,37 @@ alias Backend.{Repo, User, Friendship}
 
 IO.puts("Importing Model")
 Repo.insert!(%Backend.User{login: "name1", city: "Moscow"})
-Repo.insert!(%Backend.User{login: "name2", password: "Password2"})
-Repo.insert!(%Backend.User{login: "name3", password: "Password3"})
-Repo.insert!(%Backend.User{login: "name4", password: "Password3"})
-Repo.insert!(%Backend.User{login: "name5", password: "Password3"})
-Backend.User.create(%{login: "name6", password: "Ppassword1"})
+
+Repo.insert!(%Backend.User{
+  login: "name2",
+  password: "Password2",
+  password_confirmation: "Password2"
+})
+
+Repo.insert!(%Backend.User{
+  login: "name3",
+  password: "Password3",
+  password_confirmation: "Password3"
+})
+
+Repo.insert!(%Backend.User{
+  login: "name4",
+  password: "Password3",
+  password_confirmation: "Password3"
+})
+
+Repo.insert!(%Backend.User{
+  login: "name5",
+  password: "Password3",
+  password_confirmation: "Password3"
+})
+
+Backend.User.create(%{
+  login: "name6",
+  password: "Ppassword1",
+  password_confirmation: "Ppassword1",
+  gender: "male"
+})
 
 r1 = Backend.Repo.get(Backend.User, 1)
 r2 = Backend.Repo.get(Backend.User, 2)
@@ -40,10 +66,13 @@ Backend.Friendship.create2(r3.id, r5.id)
 # fr = Backend.Repo.all(from u in Backend.User, join: f in  Backend.Friendship,
 #   where: u.id==f.requester_user_id or u.id==f.respondent_user_id , preload: [:possible_friends], distinct: :true)
 
+IO.puts("#{inspect(Backend.Repo.all(from(f in Backend.Friendship, select: f)))}")
+IO.puts("\n #{inspect(Backend.Repo.all(from(u in Backend.User, select: u)))}")
 
-
-
-
-IO.puts("#{inspect(Backend.Repo.all(from f in Backend.Friendship, select: f))}")
-IO.puts("\n #{inspect(Backend.Repo.all(from u in Backend.User, select: u))}")
-fr = Backend.Repo.all(from u in Backend.User, join: f in  Backend.Friendship, where: u.id==f.requester_user_id or u.id==f.respondent_user_id )
+fr =
+  Backend.Repo.all(
+    from(u in Backend.User,
+      join: f in Backend.Friendship,
+      where: u.id == f.requester_user_id or u.id == f.respondent_user_id
+    )
+  )

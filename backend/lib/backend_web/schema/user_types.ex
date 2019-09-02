@@ -16,6 +16,7 @@ defmodule BackendWeb.Schema.UserTypes do
     # "message": "Cannot return null for non-nullable field",
     field(:surname, :string)
     field(:age, :integer)
+    field(:gender, :integer)
 
     # TODO: extract many to many association - friends
     # field(:friends, list_of(:user),

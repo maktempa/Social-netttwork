@@ -7,7 +7,7 @@ defmodule Backend.Model do
       use Ecto.Schema
       import Ecto.Changeset
       # TODO: check if doesn't get imported, need to unquote()?
-      # Answer: 1. Neet do use 'use'?; 2. Need to be used only inside of module (not in shell or script)
+      # Answer: 1. Need do use 'use'?; 2. Need to be used only inside of module (not in shell or script)
       import Ecto.Query
 
       def find(id) do
@@ -15,7 +15,7 @@ defmodule Backend.Model do
       end
 
       def find_by(conds) do
-        Repo.get(__MODULE__, conds)
+        Repo.get_by(__MODULE__, conds)
       end
 
       def create(attrs) do

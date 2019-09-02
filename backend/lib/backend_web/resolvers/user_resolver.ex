@@ -52,6 +52,14 @@ defmodule BackendWeb.Resolvers.UserResolver do
     Map.put(user, :token, token)
   end
 
+  # defp user_with_token(user) do
+  # case Guardian.encode_and_sign(user) do
+  # {:ok, token, _claims} -> Map.put(user, :token, token)
+  #   # {:error, msg} -> {:error, msg}
+  #   _ -> {:error}
+  # end
+  # end
+
   defp extract_error_message(changeset) do
     changeset.errors
     |> Enum.map(fn {field, {error, _details}} ->

@@ -8,6 +8,7 @@ defmodule BackendWeb.Schema do
   end
 
   mutation do
+    # user sign-in/sign-up only through http GraphQL mutations, no need for WebSocket?
     import_fields(:user_mutations)
   end
 

@@ -32,7 +32,7 @@ config :logger, :console,
 # Configures Guardian module for authentication
 config :backend, Backend.Guardian,
   issuer: "backend",
-  secretkey: "8SmlgKKQ7Gaas6kmskehp8DAeatTyuS2QRj1M7Pd3bjaZFDnA8J0OI7iF0hBwtVF"
+  secret_key: "8SmlgKKQ7Gaas6kmskehp8DAeatTyuS2QRj1M7Pd3bjaZFDnA8J0OI7iF0hBwtVF"
 
 # secret_key: "Secret key. You can use `mix guardian.gen.secret` to get one"
 
