@@ -43,8 +43,8 @@ defmodule Backend.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:bcrypt_elixir, "~>2.0"},
       # TODO: swap to guardian v. 2+ ?
-      # {:guardian, "~>2.0"},
-      {:guardian, "~>1.0"},
+      {:guardian, "~>2.0"},
+      # {:guardian, "~>1.0"},
       {:absinthe, "~> 1.4"},
       # {:absinthe_plug, "~> 1.4"},
       # {:absinthe_ecto, "~> 0.1.3"},

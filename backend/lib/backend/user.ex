@@ -121,27 +121,27 @@ defmodule Backend.User do
   # end
 
   # user authentication
-  def authenticate(login, password) do
-    user = Backend.Repo.get_by(Backend.User, login: login)
-    #  case user do
-    #    nil ->
-    #     IO.puts("No such user")
-    #    _ ->
+  # def authenticate(login, password) do
+  #   user = Backend.Repo.get_by(Backend.User, login: login)
+  #   #  case user do
+  #   #    nil ->
+  #   #     IO.puts("No such user")
+  #   #    _ ->
 
-    cond do
-      user == nil ->
-        IO.puts("No such user")
+  #   cond do
+  #     user == nil ->
+  #       IO.puts("No such user")
 
-      user.password != password ->
-        IO.puts("Wrong password")
+  #     user.password != password ->
+  #       IO.puts("Wrong password")
 
-      user.password == password ->
-        IO.puts("Authentification succesful")
+  #     user.password == password ->
+  #       IO.puts("Authentification succesful")
 
-      true ->
-        IO.puts("Encountered some error(s)")
-    end
-  end
+  #     true ->
+  #       IO.puts("Encountered some error(s)")
+  #   end
+  # end
 
   # put_password_hash() for changeset with password changes
   defp put_password_hash(

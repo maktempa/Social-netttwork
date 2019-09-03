@@ -29,13 +29,14 @@ defmodule BackendWeb.UserSocket do
       socket = Socket.put_options(socket, context: %{current_user: user})
       {:ok, socket}
     else
-      _ -> {:ok, socket}
+      # _ -> {:ok, socket}
+      _ -> :error
     end
   end
 
-  def connect(_params, socket, _connect_info) do
-    {:ok, socket}
-  end
+  # def connect(_params, socket, _connect_info) do
+  #   {:ok, socket}
+  # end
 
   # Socket id's are topics that allow you to identify all sockets for a given user:
   #
@@ -51,5 +52,5 @@ defmodule BackendWeb.UserSocket do
     "user_socket:#{user.od}"
   end
 
-  def id(_socket), do: nil
+  # def id(_socket), do: nil
 end
