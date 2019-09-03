@@ -30,6 +30,8 @@ defmodule BackendWeb.Data do
         res
 
       where ->
+        # from(c in City, where: [country: "Sweden"]) or from(c in City, where: c.country == "Sweden")
+        # City |> where(country: "Sweden") or City |> where([c], c.country == "Sweden")
         from(record in res, where: ^where)
     end
   end

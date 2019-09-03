@@ -45,5 +45,7 @@ defmodule BackendWeb.Endpoint do
     signing_salt: "tP8pRkjK"
   )
 
+  plug(CORSPlug)
+
   plug(BackendWeb.Router)
 end

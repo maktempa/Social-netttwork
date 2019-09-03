@@ -27,7 +27,9 @@ defmodule BackendWeb.Router do
     # enable GraphiQl for dev enironment
     if Mix.env() == :dev do
       forward("/graphiql", Absinthe.Plug.GraphiQL,
-        schema: BackendWeb.Schema,
+        # schema: BackendWeb.Schema,
+        schema: BackendWeb.SchemaSignInUp,
+        # only for subscription queries???
         socket_url: "ws://localhost:4000/socket"
       )
     end

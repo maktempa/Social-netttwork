@@ -23,20 +23,27 @@ defmodule BackendWeb.UserSocket do
   # {:ok, socket}
   # end
 
+  # TODO: check if needed
+  # transport :websocket, Phoenix.Transports.WebSocket
+
   def connect(%{"token" => token}, socket, _connect_info) do
     with {:ok, claim} <- Guardian.decode_and_verify(token),
          user when not is_nil(user) <- User.find(claim["sub"]) do
       socket = Socket.put_options(socket, context: %{current_user: user})
+      IO.puts("Token in soket is: #{inspect(token)}")
       {:ok, socket}
     else
       # _ -> {:ok, socket}
-      _ -> :error
+      _ ->
+        IO.puts("Error - no token in soket! ")
+        :error
     end
   end
 
-  # def connect(_params, socket, _connect_info) do
-  #   {:ok, socket}
-  # end
+  # TODO: only for testing subscrtion until get frontend which works with GraphQL queries and mutations through WebSockets. Comment then
+  def connect(_params, socket, _connect_info) do
+    {:ok, socket}
+  end
 
   # Socket id's are topics that allow you to identify all sockets for a given user:
   #
@@ -52,5 +59,5 @@ defmodule BackendWeb.UserSocket do
     "user_socket:#{user.od}"
   end
 
-  # def id(_socket), do: nil
+  def id(_socket), do: nil
 end
